@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Appointment System</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: Inter and Outfit for a premium feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div id="app-container">
+        <!-- Sidebar Navigation (Hidden on Landing/Auth pages by logic) -->
+        <aside id="sidebar" class="hidden">
+            <div class="sidebar-header">
+                <div class="logo">HealthBook<span class="highlight">.</span></div>
+            </div>
+            <nav id="sidebar-nav">
+                <!-- Dynamic Navigation Items -->
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn-ghost" onclick="app.logout()">
+                    <span class="icon">➜</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- Header (Visible on Dashboard views) -->
+            <header id="top-header" class="hidden">
+                <button id="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
+                <div class="header-title">Dashboard</div>
+                <div class="user-profile">
+                    <span id="user-name-display">User</span>
+                    <div class="avatar-circle">U</div>
+                </div>
+            </header>
+
+            <!-- Dynamic View Container -->
+            <div id="view-container">
+                <!-- Views will be injected here by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Container -->
+    <div id="modal-container" class="hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Title</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="modal-body">
+                <!-- Dynamic Modal Content -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary close-modal">Cancel</button>
+                <button id="modal-confirm-btn" class="btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <!-- Templates for Views (Hidden) -->
+    <template id="template-landing">
+        <div class="landing-page-wrapper">
+            <!-- Landing Nav -->
+            <nav class="landing-nav">
+                <div class="logo">HealthBook<span class="highlight">.</span></div>
+                <div class="landing-links">
+                    <a onclick="app.router.navigate('login?admin=true')" class="nav-link">For Providers</a>
+                    <button class="btn-primary small" onclick="app.router.navigate('login')">Sign In</button>
+                    <button class="btn-secondary small" onclick="app.router.navigate('register')">Register</button>
+                </div>
+            </nav>
+
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-container">
+                    <div class="hero-text">
+                        <div class="badge-pill">✨ New: Telehealth Support</div>
+                        <h1>Healthcare Scheduling <br>Made <span class="text-gradient">Effortless</span>.</h1>
+                        <p class="hero-sub">Experience the future of medical appointments. Secure, fast, and reliable
+                            booking for modern clinics and patients.</p>
+                        <div class="hero-actions">
+                            <button class="btn-primary large" onclick="app.router.navigate('register')">Book
+                                Appointment</button>
+                            <button class="btn-ghost large" onclick="app.router.navigate('login?admin=true')">Provider
+                                Demo ➜</button>
+                        </div>
+                        <div class="trust-indicators">
+                            <span>Trusted by top clinics</span>:
+                            <b>Kaiser</b> • <b>Mayo</b> • <b>Cleveland</b>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <!-- CSS-only Abstract UI Representation -->
+                        <div class="visual-card main-card">
+                            <div class="v-header">
+                                <div class="dots"></div>
+                            </div>
+                            <div class="v-body">
+                                <div class="v-row"></div>
+                                <div class="v-row short"></div>
+                                <div class="v-btn"></div>
+                            </div>
+                        </div>
+                        <div class="visual-card floating-card">
+                            <div class="check-icon">✓</div>
+                            <div class="v-text">Appointment Confirmed</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="features-section">
+                <div class="section-title">
+                    <h2>Why Choose HealthBook?</h2>
+                    <p>Everything you need to manage your health schedule.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📅</div>
+                        <h3>Real-time Availability</h3>
+                        <p>See open slots instantly. No back-and-forth calls or waiting times.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>Enterprise Security</h3>
+                        <p>HIPAA compliant data protection ensuring your records stay private.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Instant Updates</h3>
+                        <p>Receive SMS and Email notifications immediately after booking.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="landing-footer">
+                <div class="footer-content">
+                    <div class="footer-col">
+                        <div class="logo">HealthBook.</div>
+                        <p>&copy; 2024 HealthBook Inc.</p>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Product</h4>
+                        <a href="#">Features</a>
+                        <a href="#">Pricing</a>
+                        <a href="#">Support</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Legal</h4>
+                        <a href="#">Privacy</a>
+                        <a href="#">Terms</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </template>
+
+    <template id="template-login">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2 id="auth-title">Welcome Back</h2>
+                <p class="auth-subtitle">Sign in to your account</p>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required placeholder="name@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-primary full-width">Sign In</button>
+                </form>
+                <p class="auth-footer">Don't have an account? <a href="#"
+                        onclick="app.router.navigate('register')">Register</a></p>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-register">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2 id="auth-title">Create Account</h2>
+                <p class="auth-subtitle">Join HealthBook today</p>
+                <form
+                    onsubmit="event.preventDefault(); app.ui.showToast('Registration successful! Please login.', 'success'); app.router.navigate('login');">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" required placeholder="name@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" required placeholder="Create a password">
+                    </div>
+                    <button type="submit" class="btn-primary full-width">Register</button>
+                </form>
+                <p class="auth-footer">Already have an account? <a href="#" onclick="app.router.navigate('login')">Sign
+                        In</a></p>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-dashboard-user">
+        <div class="dashboard-container">
+            <!-- Stats Row -->
+            <div class="dashboard-grid">
+                <div class="card stat-card">
+                    <h4>Upcoming Appointments</h4>
+                    <div id="stat-upcoming" class="stat-value">0</div>
+                </div>
+                <div class="card stat-card">
+                    <h4>Completed Visits</h4>
+                    <div class="stat-value">14</div>
+                </div>
+            </div>
+
+            <!-- My Appointments Section -->
+            <div class="card content-card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h3>My Appointments</h3>
+                </div>
+                <div id="my-appointments-grid" class="slots-grid">
+                    <p style="color: var(--text-muted); padding: 20px;">No upcoming appointments.</p>
+                </div>
+            </div>
+
+            <!-- Main Booking Section (Carded) -->
+            <div class="card content-card">
+                <div class="card-header">
+                    <h3>Available Slots</h3>
+                    <div class="date-picker-wrapper">
+                        <input type="date" id="slot-date-filter" class="form-input">
+                    </div>
+                </div>
+                <div id="slots-grid" class="slots-grid">
+                    <!-- Slots rendered here -->
+                    <div class="loading-skeleton"></div>
+                    <div class="loading-skeleton"></div>
+                    <div class="loading-skeleton"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-dashboard-admin">
+        <div class="dashboard-container">
+            <div class="card content-card">
+                <div class="card-header">
+                    <h3>Slot Management</h3>
+                    <button class="btn-primary" onclick="app.views.admin.openCreateSlotModal()">+ Create New
+                        Slot</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Booked By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-slots-table-body">
+                            <!-- Rows rendered here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-settings">
+        <div class="dashboard-container">
+            <div class="card content-card" style="max-width: 600px; margin: 0 auto;">
+                <div class="card-header">
+                    <h3>Account Settings</h3>
+                </div>
+                <form id="settings-form" style="padding-top: 16px;">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="settings-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="settings-email" disabled
+                            style="background: #f4f5f7; cursor: not-allowed;">
+                        <small style="color: var(--text-muted); margin-top: 4px; display: block;">Email cannot be
+                            changed.</small>
+                    </div>
+                    <div class="form-group" style="margin-top: 24px;">
+                        <label>New Password</label>
+                        <input type="password" id="settings-password" placeholder="Leave blank to keep current">
+                    </div>
+                    <div class="form-group" style="margin-top: 32px; display: flex; justify-content: flex-end;">
+                        <button type="submit" class="btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
